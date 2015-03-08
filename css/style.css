@@ -1,0 +1,144 @@
+body
+{
+    background-color: #AAA;
+    font-family: Helvetica, sans-serif;
+}
+
+div#container
+{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+div#container h1
+{
+    margin-left: 55px;
+    color: #cc342d;
+}
+
+section
+{
+    margin: 20px 50px;
+    padding: 20px;
+    background-color: #FFF;
+    border-radius: 20px;
+    border: solid 3px #cc342d;
+    box-shadow: 5px 5px 5px #666;
+}
+
+section h2
+{
+    margin-top: 0px;
+    color: #cc342d;
+}
+
+section#personal
+{
+    height: 225px;
+}
+
+section#personal div#bio
+{
+    margin-left: 200px;
+}
+
+div#picture-container
+{
+    width: 175px;
+    height: 175px;
+    border: solid 1px red;
+    float: left;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+form table th
+{
+    text-align: right;
+    color: #666;
+    vertical-align: top;
+    padding-top: 7px;
+}
+
+a.button
+{
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    font-size: small;
+}
+
+input, textarea, select, a.button
+{
+    border-radius: 10px;
+    padding: 7px;
+    border: solid 1px #AAA;
+    background-color: #FFF;
+    margin: 3px;
+}
+
+input:focus, textarea:focus, select:focus, a.button:focus
+{
+    background-color: #CCC;
+    border: solid 1px #cc342d;
+}
+
+input[type="submit"], input[type="button"], a.button
+{
+    padding: 7px 10px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover, a.button:hover
+{
+    border: solid 1px #666;
+    background-color: #cc342d;
+    color: #FFF;
+}
+
+input[type="text"].validation-error, textarea.validation-error, select.validation-error
+{
+    border: solid 1px red;
+}
+
+ul.error-messages
+{
+    margin: 5px;
+    padding: 0px;
+    list-style-type: none;
+    color: #cc342d;
+}
+
+.data-table
+{
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #7f7f7f;
+    border-collapse: collapse;
+}
+.data-table tr:nth-child(odd)
+{
+    background-color: #cccccc;
+}
+.data-table tr:nth-child(even)
+{
+    background-color: #ffffff;
+}
+.data-table td
+{
+    vertical-align: middle;    
+    border: 1px solid #7f7f7f;
+    border-width: 0px 1px 1px 0px;
+    text-align: center;
+    padding: 5px;
+    color: #000000;
+}
+.data-table tr:first-child th
+{
+    padding: 5px;
+    background-color: #bf0000;
+    border: 0px solid #7f7f7f;
+    text-align: center;
+    border-width: 0px 0px 1px 1px;
+    color: #ffffff;
+}
