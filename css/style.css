@@ -42,16 +42,6 @@ section#personal div#bio
 {
     margin-left: 200px;
 }
-
-div#picture-container
-{
-    width: 175px;
-    height: 175px;
-    border: solid 1px red;
-    float: left;
-    border-radius: 20px;
-    overflow: hidden;
-}
 */
 
 form table th
@@ -72,7 +62,7 @@ a.button
 
 input, textarea, select, a.button
 {
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 7px;
     border: solid 1px #AAA;
     background-color: #FFF;
@@ -143,4 +133,78 @@ ul.error-messages
     text-align: center;
     border-width: 0px 0px 1px 1px;
     color: #ffffff;
+}
+
+ul.product-container
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+li.product
+{
+    padding: 5px;
+    width: 200px;
+    margin: 10px;
+    background-color: #DDDDDD;
+    border-radius: 20px;
+}
+
+li.product p
+{
+    margin: 7px;
+    border-bottom: 1px dashed #666;
+}
+
+li.product h3
+{
+    text-align: center;
+}
+
+li.product p.price, li.product p.stock
+{
+    text-align: right;
+}
+
+li.product p.price span.old
+{
+    text-decoration: line-through;
+    color: #666666;
+}
+
+li.product p.price span.new
+{
+    font-weight: bold;
+    color: green;
+}
+
+li.product div.button
+{
+    text-align: center;
+}
+
+li.product div.button form
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+li.product div.picture
+{
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    overflow: hidden;
+    text-align: center;
+    padding-left: 50px;
+}
+
+li.product div.picture img
+{
+    width: 100px;
+    height: 100px;
 }
