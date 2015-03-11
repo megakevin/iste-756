@@ -32,6 +32,26 @@ section h2
     color: #cc342d;
 }
 
+section#navigation
+{
+    padding: 0;
+}
+
+ul#navigation-container
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+li.navigation-item
+{
+    margin: 5px;
+}
+
 /*
 section#personal
 {

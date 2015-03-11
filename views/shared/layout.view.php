@@ -6,6 +6,17 @@
     </head>
     <body>
         <div id="container">
+            <h1>ISTE 756 - e-Store</h1>
+            <section id="navigation">
+                <ul id="navigation-container">
+                    <li class="navigation-item">
+                        <a class="button" href="index.php">Catalog</a>
+                    </li>
+                    <li class="navigation-item">
+                        <a class="button" href="cart.php">Cart</a>
+                    </li>
+                </ul>
+            </section>
             <?php include($page_content); ?>
         </div>
     </body>

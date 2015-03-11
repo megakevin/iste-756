@@ -1,4 +1,3 @@
-<h1>ISTE 756 - e-Store</h1>
 <section id="offers">
     <h2>Today's Offers</h2>
 
