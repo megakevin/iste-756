@@ -8,7 +8,7 @@
         <ul class="product-list-container">
             <?php foreach ($context->products as $product) { ?>
                 <li class="product-list-item">
-                    <form method='POST' action='admin.php'>
+                    <form method="POST" action="admin.php" enctype="multipart/form-data">
                         <p>
                             <input type="text" name="name" id="name"
                                    class="<?= ($context->errors["name"]) ? "validation-error" : "" ?>"
@@ -18,7 +18,8 @@
                             <img src="<?= $product->picture ?>" alt="<?= $product->name ?>"/>
                         </div>
                         <p>
-                            <input type="file" name="picture" id="picture">
+                            <input type="file" name="picture" id="picture"
+                                   class="<?= ($context->errors["picture"]) ? "validation-error" : "" ?>">
                         </p>
                         <p>
                             <textarea class="<?= ($context->errors["description"]) ? "validation-error" : "" ?>"
@@ -28,33 +29,34 @@
                         <p>
 
                             Regular price:
-                            <input type="text" name="price" id="price"
+                            <input type="number" name="price" id="price"
                                    class="<?= ($context->errors["price"]) ? "validation-error" : "" ?>"
                                    value="<?= $product->price ?>"/>
                             Stock:
-                            <input type="text" name="quantity_in_stock" id="quantity_in_stock"
+                            <input type="number" name="quantity_in_stock" id="quantity_in_stock"
                                    class="<?= ($context->errors["quantity_in_stock"]) ? "validation-error" : "" ?>"
                                    value="<?= $product->quantity_in_stock ?>"/>
                         </p>
                         <p>
                             Discount price:
-                            <input type="text" name="sale_price" id="sale_price"
+                            <input type="number" name="sale_price" id="sale_price"
                                    class="<?= ($context->errors["sale_price"]) ? "validation-error" : "" ?>"
                                    value="<?= $product->sale_price ?>"/>
                             On Discount?:
                             <input type="hidden" name="is_on_sale" id="is_on_sale" value="0">
-                            <input type="checkbox" name="is_on_sale" id="is_on_sale"
+                            <input type="checkbox" name="is_on_sale" id="is_on_sale" value="1"
                                    class="<?= ($context->errors["is_on_sale"]) ? "validation-error" : "" ?>"
                                    <?= $product->is_on_sale ? "checked" : "" ?>/>
                         </p>
                         <?php if ($context->errors) { ?>
                             <div>
-                                <div><?php show_error_messages("name"); ?></div>
-                                <div><?php show_error_messages("description"); ?></div>
-                                <div><?php show_error_messages("price"); ?></div>
-                                <div><?php show_error_messages("sale_price"); ?></div>
-                                <div><?php show_error_messages("is_on_sale"); ?></div>
-                                <div><?php show_error_messages("quantity_in_stock"); ?></div>
+                                <?php show_error_messages("name"); ?>
+                                <?php show_error_messages("description"); ?>
+                                <?php show_error_messages("price"); ?>
+                                <?php show_error_messages("sale_price"); ?>
+                                <?php show_error_messages("is_on_sale"); ?>
+                                <?php show_error_messages("quantity_in_stock"); ?>
+                                <?php show_error_messages("picture"); ?>
                             </div>
                         <?php } ?>
                         <div>
@@ -67,9 +69,4 @@
             <?php } ?>
         </ul>
     </div>
-
-    <pre>
-        <?php print_r($context->products) ?>
-    </pre>
-
 </section>

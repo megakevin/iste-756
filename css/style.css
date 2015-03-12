@@ -108,7 +108,8 @@ input[type="submit"]:hover, input[type="button"]:hover, a.button:hover
     color: #FFF;
 }
 
-input[type="text"].validation-error, textarea.validation-error, select.validation-error
+input[type="text"].validation-error, input[type="number"].validation-error, input[type="file"].validation-error,
+textarea.validation-error, select.validation-error
 {
     border: solid 1px red;
 }

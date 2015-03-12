@@ -111,8 +111,27 @@ class ProductService
         $shopping_cart->update();
     }
 
-    public function update_product($product_id)
+    public function update_product($data)
     {
-        echo "LOLOLOL";
+        $product_to_update = Product::get_by_id($data["product_id"]);
+
+        $product_to_update->name = $data["name"];
+        $product_to_update->description = $data["description"];
+        $product_to_update->price = $data["price"];
+        $product_to_update->quantity_in_stock = $data["quantity_in_stock"];
+        $product_to_update->sale_price = $data["sale_price"];
+        $product_to_update->is_on_sale = $data["is_on_sale"];
+
+        if ($data["picture"]["name"])
+        {
+            $target_file = "img/products/" . basename($data["picture"]["tmp_name"] . "." .
+                    pathinfo($data["picture"]["name"],PATHINFO_EXTENSION));
+
+            move_uploaded_file($data["picture"]["tmp_name"], $target_file);
+
+            $product_to_update->picture = $target_file;
+        }
+
+        $product_to_update->update();
     }
 }

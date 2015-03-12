@@ -21,15 +21,14 @@ class AdminController extends BaseController
 
     public function post()
     {
-        echo "<pre>";
-        print_r($_POST);
-        echo "</pre>";
-
         if (isset($_POST["edit_product_submit"]))
         {
             if ($this->edit_product_is_valid())
             {
-                $this->service->update_product($_POST);
+                $update_data = $_POST;
+                $update_data["picture"] = $_FILES["picture"];
+
+                $this->service->update_product($update_data);
             }
         }
 
@@ -43,30 +42,62 @@ class AdminController extends BaseController
 
     public function edit_product_is_valid()
     {
-//        $validator = new ValidationHelper();
-//
-//        if (!$validator->validate_required($_POST["product_id"]))
-//        {
-//            $this->context->errors["product_id"][] = "Product Id is required.";
-//        }
-//        if (!$validator->validate_required($_POST["name"]))
-//        {
-//            $this->context->errors["name"][] = "Product Id is required.";
-//        }
-//
-//        if (!$validator->validate_number($_POST["product_id"]))
-//        {
-//            $this->context->errors["product_id"][] = "Not a valid Product Id.";
-//        }
+        $validator = new ValidationHelper();
 
-        /*    public $id;
-    public $name;
-    public $description;
-    public $price;
-    public $quantity_in_stock;
-    public $picture;
-    public $is_on_sale;
-    public $sale_price;*/
+        if (!$validator->validate_required($_POST["product_id"]))
+        {
+            $this->context->errors["product_id"][] = "Product Id is required.";
+        }
+        if (!$validator->validate_required($_POST["name"]))
+        {
+            $this->context->errors["name"][] = "Please enter the product's Name.";
+        }
+        if (!$validator->validate_required($_POST["description"]))
+        {
+            $this->context->errors["description"][] = "Please enter the product's Description.";
+        }
+        if (!$validator->validate_required($_POST["price"]))
+        {
+            $this->context->errors["price"][] = "Please enter the product's Price.";
+        }
+        if (!$validator->validate_required($_POST["quantity_in_stock"]))
+        {
+            $this->context->errors["quantity_in_stock"][] = "Please enter the product's Stock quantity.";
+        }
+        if (!$validator->validate_required($_POST["is_on_sale"]))
+        {
+            $this->context->errors["is_on_sale"][] = "Please specify whether the product's On Discount.";
+        }
+
+        if (!$validator->validate_number($_POST["product_id"]))
+        {
+            $this->context->errors["product_id"][] = "Not a valid Product Id.";
+        }
+        if (!$validator->validate_number($_POST["price"]))
+        {
+            $this->context->errors["price"][] = "Not a valid Price.";
+        }
+        if (!$validator->validate_number($_POST["quantity_in_stock"]))
+        {
+            $this->context->errors["quantity_in_stock"][] = "Not a valid Stock quantity.";
+        }
+
+        if ($validator->validate_checked($_POST["is_on_sale"]))
+        {
+            if (!$validator->validate_required($_POST["sale_price"]))
+            {
+                $this->context->errors["sale_price"][] =
+                    "A Discount price is required if the product is On Discount.";
+            }
+        }
+
+        if ($validator->validate_file_is_present($_FILES["picture"]))
+        {
+            if (!$validator->validate_file_is_picture($_FILES["picture"]))
+            {
+                $this->context->errors["picture"][] = "Only image files are allowed.";
+            }
+        }
 
         # If there are no errors, then the input is valid
         return empty($this->context->errors);
