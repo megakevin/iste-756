@@ -190,13 +190,13 @@ li.product p.price, li.product p.stock
     text-align: right;
 }
 
-li.product p.price span.old, li.cart-item p.price span.old
+li.product p.price span.old, li.cart-item span.price span.old
 {
     text-decoration: line-through;
     color: #666666;
 }
 
-li.product p.price span.new, li.cart-item p.price span.new
+li.product p.price span.new, li.cart-item span.price span.new
 {
     font-weight: bold;
     color: green;
@@ -227,4 +227,44 @@ li.product div.picture img
 {
     width: 100px;
     height: 100px;
+}
+
+div.cart-item-container
+{
+    background-color: #DDDDDD;
+    border-radius: 20px;
+
+    padding-bottom: 1px;
+}
+
+div.cart-item-container h3
+{
+    padding: 10px;
+}
+
+div.cart-item-container p.total-price
+{
+    text-align: right;
+    margin: 15px;
+    font-size: x-large;
+}
+
+div.cart-item-container ul
+{
+    padding: 0;
+    margin: 10px;
+    list-style: none;
+}
+
+div.cart-item-container div.buttons
+{
+    margin: 15px;
+}
+
+li.cart-item
+{
+    padding: 5px;
+    margin: 10px;
+
+    border-bottom: 1px dashed #666;
 }

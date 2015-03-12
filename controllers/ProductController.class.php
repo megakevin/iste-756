@@ -6,7 +6,6 @@ require __DIR__ . "/../helpers/ValidationHelper.class.php";
 
 class ProductController extends BaseController
 {
-    private $context;
     private $service;
 
     public function __construct($context)
@@ -26,10 +25,6 @@ class ProductController extends BaseController
         {
             if ($this->add_to_cart_is_valid())
             {
-//                echo "<pre>";
-//                print_r($_POST);
-//                echo "</pre>";
-
                 $this->service->add_product_to_cart($_POST["product_id"]);
             }
         }

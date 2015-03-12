@@ -252,4 +252,16 @@ class Product extends BaseModel
             throw new Exception("Not enough in stock");
         }
     }
+
+    public function increase_quantity_in_stock_by($quantity_to_increase)
+    {
+        if ($quantity_to_increase > 0)
+        {
+            $this->quantity_in_stock += $quantity_to_increase;
+        }
+        else
+        {
+            throw new Exception("Cannot increase by negative number");
+        }
+    }
 }

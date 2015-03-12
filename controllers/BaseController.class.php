@@ -2,6 +2,8 @@
 
 abstract class BaseController
 {
+    protected $context;
+
     public function process_request()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET')

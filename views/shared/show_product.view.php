@@ -19,10 +19,12 @@
             echo "<p class='price'>$ $product->price</p>";
         }
 
+        $disabled = ($product->quantity_in_stock == 0 ? "disabled" : "");
+
         echo "<div class='button'>
                 <form method='POST' action='index.php'>
-                    <input type='hidden' id='product_id' name='product_id' value='$product->id' />
-                    <input type='submit' name='add_to_cart_submit' value='Add to cart'>
+                    <input type='hidden' id='product_id' name='product_id' value='$product->id'/>
+                    <input type='submit' name='add_to_cart_submit' value='Add to cart' $disabled>
                 </form>
             </div>
         </li>";

@@ -1,14 +1,12 @@
 <?php
 
 require "BaseController.class.php";
-require __DIR__ . "/../helpers/ValidationHelper.class.php";
 
 require __DIR__ . "/../services/ShoppingCartService.class.php";
 
 class ShoppingCartController extends BaseController
 {
-    private $context;
-    //private $service;
+    private $service;
 
     public function __construct($context)
     {
@@ -23,16 +21,9 @@ class ShoppingCartController extends BaseController
 
     public function post()
     {
-        if (isset($_POST["add_to_cart_submit"]))
+        if (isset($_POST["clear_cart_submit"]))
         {
-            if ($this->is_valid())
-            {
-                echo "<pre>";
-                print_r($_POST);
-                echo "</pre>";
-
-                //$this->service->add_product_to_cart($_POST["product_id"]);
-            }
+            $this->service->clear_cart(100, "session"); //TODO: User Id and session
         }
 
         $this->load_data();
@@ -40,20 +31,6 @@ class ShoppingCartController extends BaseController
 
     public function load_data()
     {
-        $this->context->cart_items = $this->service->get_items(100, "session"); //TODO: User Id and session
-        //$this->context->products = $this->service->get_products();
-    }
-
-    public function is_valid()
-    {
-        $validator = new ValidationHelper();
-
-//        if (!$validator->validate_number($_POST["product_id"]))
-//        {
-//            $this->context->errors["product_id"][] = "Not a valid Product Id.";
-//        }
-
-        # If there are no errors, then the input is valid
-        return empty($this->context->errors);
+        $this->context->cart = $this->service->get_cart(100, "session"); //TODO: User Id and session
     }
 }

@@ -11,6 +11,8 @@ class ShoppingCart extends BaseModel
     public $session_id;
     public $total_price;
 
+    public $items;
+
     public function __construct()
     {
 
@@ -106,9 +108,9 @@ class ShoppingCart extends BaseModel
 
     public function get_items()
     {
-        $result = array();
+        $this->items = array();
         $query = "SELECT sci.id, sci.product_id, sci.shopping_cart_id, sci.product_quantity,
-                         p.name, p.description, p.is_on_sale, p.price, p.sale_price
+                         p.name, p.description, p.is_on_sale, p.price, p.sale_price, p.quantity_in_stock, p.picture
                   FROM shopping_cart_items AS sci
                   INNER JOIN products AS p ON sci.product_id = p.id
                   WHERE sci.shopping_cart_id = ?";
@@ -123,7 +125,7 @@ class ShoppingCart extends BaseModel
             $stmt->store_result();
             $stmt->bind_result($shopping_cart_item_id, $product_id, $shopping_cart_id, $product_quantity,
                                $product_name, $product_description, $product_is_on_sale,
-                               $product_price, $product_sale_price);
+                               $product_price, $product_sale_price, $product_quantity_in_stock, $picture);
 
             if ($stmt->num_rows > 0)
             {
@@ -142,14 +144,16 @@ class ShoppingCart extends BaseModel
                     $product->is_on_sale = $product_is_on_sale;
                     $product->price = $product_price;
                     $product->sale_price = $product_sale_price;
+                    $product->quantity_in_stock = $product_quantity_in_stock;
+                    $product->picture = $picture;
 
                     $item->product = $product;
 
-                    $result[] = $item;
+                    $this->items[] = $item;
                 }
             }
 
-            return $result;
+            return $this->items;
         }
         else
         {
@@ -248,5 +252,10 @@ class ShoppingCart extends BaseModel
         }
 
         $this->total_price = $new_total;
+    }
+
+    public function clear()
+    {
+
     }
 }
