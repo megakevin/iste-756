@@ -1,11 +1,10 @@
 <?php
 
-require "BaseService.class.php";
-require_once __DIR__ . "/../models/Product.class.php";
-require __DIR__ . "/../models/ShoppingCart.class.php";
+require_once "models/Product.class.php";
+require "models/ShoppingCart.class.php";
 
 
-class ProductService extends BaseService
+class ProductService
 {
     public function __construct()
     {
@@ -66,6 +65,11 @@ class ProductService extends BaseService
 //        return $result;
 //    }
 
+    public function get_all_products()
+    {
+        return Product::get_all();
+    }
+
     public function get_products_on_sale()
     {
         return Product::get_all_on_sale();
@@ -105,5 +109,10 @@ class ProductService extends BaseService
 
         $shopping_cart->calculate_total();
         $shopping_cart->update();
+    }
+
+    public function update_product($product_id)
+    {
+        echo "LOLOLOL";
     }
 }

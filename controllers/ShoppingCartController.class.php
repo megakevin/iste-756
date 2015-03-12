@@ -1,8 +1,7 @@
 <?php
 
 require "BaseController.class.php";
-
-require __DIR__ . "/../services/ShoppingCartService.class.php";
+require "services/ShoppingCartService.class.php";
 
 class ShoppingCartController extends BaseController
 {

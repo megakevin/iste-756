@@ -253,9 +253,4 @@ class ShoppingCart extends BaseModel
 
         $this->total_price = $new_total;
     }
-
-    public function clear()
-    {
-
-    }
 }

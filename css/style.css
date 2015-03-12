@@ -4,13 +4,13 @@ body
     font-family: Helvetica, sans-serif;
 }
 
-div#container
+div#main-container
 {
     margin-left: 20px;
     margin-right: 20px;
 }
 
-div#container h1
+div#main-container h1
 {
     margin-left: 55px;
     color: #cc342d;
@@ -190,13 +190,13 @@ li.product p.price, li.product p.stock
     text-align: right;
 }
 
-li.product p.price span.old, li.cart-item span.price span.old
+li.product p.price span.old, li.product-list-item span.price span.old
 {
     text-decoration: line-through;
     color: #666666;
 }
 
-li.product p.price span.new, li.cart-item span.price span.new
+li.product p.price span.new, li.product-list-item span.price span.new
 {
     font-weight: bold;
     color: green;
@@ -213,23 +213,35 @@ li.product div.button form
     padding: 0px;
 }
 
+li.product div.picture, li.product-list-item div.picture
+{
+    border-radius: 20px;
+    overflow: hidden;
+    text-align: center;
+}
+
 li.product div.picture
 {
     width: 100px;
     height: 100px;
-    border-radius: 20px;
-    overflow: hidden;
-    text-align: center;
     padding-left: 50px;
 }
 
-li.product div.picture img
+li.product-list-item div.picture
+{
+    width: 120px;
+    height: 100px;
+    background-color: #FFFFFF;
+    padding: 10px;
+}
+
+li.product div.picture img, li.product-list-item div.picture img
 {
     width: 100px;
     height: 100px;
 }
 
-div.cart-item-container
+div.cart-container, div.control-panel
 {
     background-color: #DDDDDD;
     border-radius: 20px;
@@ -237,34 +249,39 @@ div.cart-item-container
     padding-bottom: 1px;
 }
 
-div.cart-item-container h3
+div.cart-container h3.cart-empty-message
 {
     padding: 10px;
 }
 
-div.cart-item-container p.total-price
+div.cart-container p.total-price
 {
     text-align: right;
     margin: 15px;
     font-size: x-large;
 }
 
-div.cart-item-container ul
+div.cart-container div.buttons
+{
+    margin: 15px;
+}
+
+ul.product-list-container
 {
     padding: 0;
     margin: 10px;
     list-style: none;
 }
 
-div.cart-item-container div.buttons
-{
-    margin: 15px;
-}
-
-li.cart-item
+li.product-list-item
 {
     padding: 5px;
     margin: 10px;
 
     border-bottom: 1px dashed #666;
+}
+
+li.product-list-item textarea
+{
+    width: 50%;
 }

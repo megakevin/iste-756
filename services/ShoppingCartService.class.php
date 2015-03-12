@@ -1,9 +1,8 @@
 <?php
 
-require "BaseService.class.php";
-require __DIR__ . "/../models/ShoppingCart.class.php";
+require "models/ShoppingCart.class.php";
 
-class ShoppingCartService extends BaseService
+class ShoppingCartService
 {
     public function __construct()
     {

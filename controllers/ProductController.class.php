@@ -2,7 +2,7 @@
 
 require "services/ProductService.class.php";
 require "BaseController.class.php";
-require __DIR__ . "/../helpers/ValidationHelper.class.php";
+require "helpers/ValidationHelper.class.php";
 
 class ProductController extends BaseController
 {

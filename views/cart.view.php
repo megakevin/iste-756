@@ -1,10 +1,10 @@
 <section id="offers">
     <h2>Your Shopping Cart</h2>
-    <div class="cart-item-container">
+    <div class="cart-container">
         <?php if ($context->cart->items) { ?>
-        <ul>
+        <ul class="product-list-container">
             <?php foreach ($context->cart->items as $cart_item) { ?>
-                <li class="cart-item">
+                <li class="product-list-item">
                     <h3><?= $cart_item->product->name ?></h3>
                     <p>
                         <?= $cart_item->product->description ?>
@@ -24,7 +24,9 @@
             <?php } ?>
         </ul>
         <?php } else { ?>
-            <h3>Your cart is empty! Go <a href="index.php">here</a> if you want to purchase something.</h3>
+            <h3 class="cart-empty-message">
+                Your cart is empty! Go <a href="index.php">here</a> if you want to purchase something.
+            </h3>
         <?php } ?>
         <p class="total-price">
             <span>Total: $ <?= $context->cart->total_price ?></span>
