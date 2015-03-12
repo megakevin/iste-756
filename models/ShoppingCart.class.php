@@ -104,6 +104,59 @@ class ShoppingCart extends BaseModel
         }
     }
 
+    public function get_items()
+    {
+        $result = array();
+        $query = "SELECT sci.id, sci.product_id, sci.shopping_cart_id, sci.product_quantity,
+                         p.name, p.description, p.is_on_sale, p.price, p.sale_price
+                  FROM shopping_cart_items AS sci
+                  INNER JOIN products AS p ON sci.product_id = p.id
+                  WHERE sci.shopping_cart_id = ?";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->bind_param("i", $this->id);
+
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($shopping_cart_item_id, $product_id, $shopping_cart_id, $product_quantity,
+                               $product_name, $product_description, $product_is_on_sale,
+                               $product_price, $product_sale_price);
+
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    $item = new ShoppingCartItem();
+                    $item->id = $shopping_cart_item_id;
+                    $item->product_id = $product_id;
+                    $item->shopping_cart_id = $shopping_cart_id;
+                    $item->product_quantity = $product_quantity;
+
+                    $product = new Product();
+                    $product->id = $product_id;
+                    $product->name = $product_name;
+                    $product->description = $product_description;
+                    $product->is_on_sale = $product_is_on_sale;
+                    $product->price = $product_price;
+                    $product->sale_price = $product_sale_price;
+
+                    $item->product = $product;
+
+                    $result[] = $item;
+                }
+            }
+
+            return $result;
+        }
+        else
+        {
+            throw new Exception("No connection with the DB");
+        }
+    }
+
     public function has_item($product_id)
     {
         $query = "SELECT id

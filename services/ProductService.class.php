@@ -69,6 +69,7 @@ class ProductService extends BaseService
     public function get_products_on_sale()
     {
         return Product::get_all_on_sale();
+        //return Product::get();
     }
 
     public function get_products()
@@ -83,13 +84,13 @@ class ProductService extends BaseService
         $product_to_update->reduce_quantity_in_stock_by(1);
         $product_to_update->update(); // TODO: Exception here if product not found
 
-        $shopping_cart = ShoppingCart::get_by(100, "session");
+        $shopping_cart = ShoppingCart::get_by(100, "session"); //TODO: User Id and session
 
         if (!$shopping_cart)
         {
             $shopping_cart = new ShoppingCart();
-            $shopping_cart->user_id = 100;
-            $shopping_cart->session_id = "session";
+            $shopping_cart->user_id = 100; //TODO: User Id and session
+            $shopping_cart->session_id = "session"; //TODO: User Id and session
             $shopping_cart->save();
         }
 

@@ -62,6 +62,65 @@ class Product extends BaseModel
             throw new Exception("No connection with the DB");
         }
     }
+    
+    public static function select($query, $bind_result_callback, $selector_callback)
+    {
+        $result = array();
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->execute();
+            $stmt->store_result();
+            $bind_result_callback($stmt);
+
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    $result[] = $selector_callback();
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public static function get()
+    {
+        $id = ""; 
+        $name = ""; 
+        $description = ""; 
+        $quantity_in_stock = ""; 
+        $picture = ""; 
+        $price = ""; 
+        $sale_price = ""; 
+        $is_on_sale = "";
+        
+        return Product::select("SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
+                                FROM products 
+                                WHERE is_on_sale = TRUE",
+                                function ($stmt)
+                                {
+                                    $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
+                                },
+                                function ()
+                                {
+                                    $product = new Product();
+
+                                    $product->id = $id;
+                                    $product->name = $name;
+                                    $product->description = $description;
+                                    $product->quantity_in_stock = $quantity_in_stock;
+                                    $product->picture = $picture;
+                                    $product->price = $price;
+                                    $product->sale_price = $sale_price;
+                                    $product->is_on_sale = $is_on_sale;
+
+                                    return $product;
+                                });
+    }
 
     public static function get_all_on_sale()
     {

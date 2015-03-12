@@ -9,6 +9,8 @@ class ShoppingCartItem extends BaseModel
     public $shopping_cart_id;
     public $product_quantity;
 
+    public $product;
+
     public function __construct()
     {
 

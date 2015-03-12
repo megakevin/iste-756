@@ -190,13 +190,13 @@ li.product p.price, li.product p.stock
     text-align: right;
 }
 
-li.product p.price span.old
+li.product p.price span.old, li.cart-item p.price span.old
 {
     text-decoration: line-through;
     color: #666666;
 }
 
-li.product p.price span.new
+li.product p.price span.new, li.cart-item p.price span.new
 {
     font-weight: bold;
     color: green;
