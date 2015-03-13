@@ -22,11 +22,4 @@
             <a class="button" href="index.php?page=<?= $context->next_page ?>">Next ></a>
         <?php } ?>
     </div>
-
-    <?php if ($context->errors) { ?>
-        <div>
-            <?php show_error_messages("page"); ?>
-        </div>
-    <?php } ?>
-
 </section>
