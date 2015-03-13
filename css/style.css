@@ -208,7 +208,7 @@ li.product div.button
     text-align: center;
 }
 
-li.product div.button form
+li.product div.button form, form
 {
     margin: 0px;
     padding: 0px;

@@ -6,6 +6,8 @@ abstract class BaseController
 
     public function process_request()
     {
+        session_start();
+
         if ($_SERVER['REQUEST_METHOD'] === 'GET')
         {
             $this->get();
