@@ -186,7 +186,7 @@ class Product extends BaseModel
 //                                });
 //    }
 
-    public function get_all()
+    public static function get_all()
     {
         $result = array();
         $query = "SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
@@ -280,6 +280,51 @@ class Product extends BaseModel
 
         if ($stmt = $db->prepare($query))
         {
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
+
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    $product = new Product();
+
+                    $product->id = $id;
+                    $product->name = $name;
+                    $product->description = $description;
+                    $product->quantity_in_stock = $quantity_in_stock;
+                    $product->picture = $picture;
+                    $product->price = $price;
+                    $product->sale_price = $sale_price;
+                    $product->is_on_sale = $is_on_sale;
+
+                    $result[] = $product;
+                }
+            }
+
+            return $result;
+        }
+        else
+        {
+            throw new Exception("No connection with the DB");
+        }
+    }
+
+    public static function get_not_on_sale_limit($limit_start, $limit_offset)
+    {
+        $result = array();
+        $query = "SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
+                  FROM products
+                  WHERE is_on_sale = FALSE
+                  LIMIT ?, ?";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->bind_param("ii", $limit_start, $limit_offset);
+
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);

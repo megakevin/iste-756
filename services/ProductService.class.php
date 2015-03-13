@@ -6,6 +6,8 @@ require "models/ShoppingCart.class.php";
 
 class ProductService
 {
+    public static $page_size = 5;
+
     public function __construct()
     {
 
@@ -65,6 +67,11 @@ class ProductService
 //        return $result;
 //    }
 
+    public function get_page_size()
+    {
+        return ProductService::$page_size;
+    }
+
     public function get_all_products()
     {
         return Product::get_all();
@@ -81,20 +88,28 @@ class ProductService
         return Product::get_all_not_on_sale();
     }
 
-    public function add_product_to_cart($product_id)
+    public function get_products_not_on_sale_page($page_number)
+    {
+        $limit_start = ($page_number - 1) * ProductService::$page_size;
+        $limit_offset = ProductService::$page_size;
+
+        return Product::get_not_on_sale_limit($limit_start, $limit_offset);
+    }
+
+    public function add_product_to_cart($product_id, $user_id, $session_id)
     {
         $product_to_update = Product::get_by_id($product_id);
 
         $product_to_update->reduce_quantity_in_stock_by(1);
         $product_to_update->update(); // TODO: Exception here if product not found
 
-        $shopping_cart = ShoppingCart::get_by(100, "session"); //TODO: User Id and session
+        $shopping_cart = ShoppingCart::get_by($user_id, $session_id); //TODO: User Id and session
 
         if (!$shopping_cart)
         {
             $shopping_cart = new ShoppingCart();
-            $shopping_cart->user_id = 100; //TODO: User Id and session
-            $shopping_cart->session_id = "session"; //TODO: User Id and session
+            $shopping_cart->user_id = $user_id; //TODO: User Id and session
+            $shopping_cart->session_id = $session_id; //TODO: User Id and session
             $shopping_cart->save();
         }
 

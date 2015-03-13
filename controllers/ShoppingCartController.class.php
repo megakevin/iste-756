@@ -22,7 +22,7 @@ class ShoppingCartController extends BaseController
     {
         if (isset($_POST["clear_cart_submit"]))
         {
-            $this->service->clear_cart(100, "session"); //TODO: User Id and session
+            $this->service->clear_cart($_SESSION["user"]["id"], session_id()); //TODO: User Id and session
         }
 
         $this->load_data();
@@ -30,6 +30,6 @@ class ShoppingCartController extends BaseController
 
     public function load_data()
     {
-        $this->context->cart = $this->service->get_cart(100, "session"); //TODO: User Id and session
+        $this->context->cart = $this->service->get_cart($_SESSION["user"]["id"], session_id()); //TODO: User Id and session
     }
 }

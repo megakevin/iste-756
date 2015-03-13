@@ -169,7 +169,7 @@ ul.product-container
 li.product
 {
     padding: 5px;
-    width: 200px;
+    width: 185px;
     margin: 10px;
     background-color: #DDDDDD;
     border-radius: 20px;
@@ -225,7 +225,7 @@ li.product div.picture
 {
     width: 100px;
     height: 100px;
-    padding-left: 50px;
+    padding-left: 40px;
 }
 
 li.product-list-item div.picture

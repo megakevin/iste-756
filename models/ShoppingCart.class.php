@@ -22,7 +22,7 @@ class ShoppingCart extends BaseModel
     {
         $query = "SELECT id, user_id, session_id, total_price
                   FROM shopping_carts
-                  WHERE user_id = ? AND session_id = ?";
+                  WHERE user_id = ? OR session_id = ?";
 
         $db = BaseModel::get_connection();
 
