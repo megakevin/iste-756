@@ -115,6 +115,20 @@ class ProductService
     {
         $product_to_update = Product::get_by_id($data["product_id"]);
 
+        if ($product_to_update->is_on_sale != $data["is_on_sale"])
+        {
+            $number_of_products_on_sale = Product::get_on_sale_count();
+
+            if ($data["is_on_sale"] && $number_of_products_on_sale >= Product::$max_on_sale_count)
+            {
+                throw new Exception("Can't have more than " . Product::$max_on_sale_count . " products on discount.");
+            }
+            if (!$data["is_on_sale"] && $number_of_products_on_sale <= Product::$min_on_sale_count)
+            {
+                throw new Exception("Can't have less than " . Product::$min_on_sale_count . " products on discount.");
+            }
+        }
+
         $product_to_update->name = $data["name"];
         $product_to_update->description = $data["description"];
         $product_to_update->price = $data["price"];
@@ -128,11 +142,13 @@ class ProductService
                     pathinfo($data["picture"]["name"],PATHINFO_EXTENSION));
 
             move_uploaded_file($data["picture"]["tmp_name"], $target_file);
+            echo "move_uploaded_file();";
 
             $product_to_update->picture = $target_file;
         }
 
         $product_to_update->update();
+        echo "product_to_update->update();";
     }
 
     public function delete_product($product_id)
@@ -149,7 +165,7 @@ class ProductService
 
                 if ($number_of_products_on_sale <= Product::$min_on_sale_count)
                 {
-                    throw new Exception("Can't have less than 3 products on discount.");
+                    throw new Exception("Can't have less than " . Product::$min_on_sale_count . " products on discount.");
                 }
             }
 
@@ -171,7 +187,7 @@ class ProductService
         }
         else
         {
-            throw new Exception("Can't have less than 15 products.");
+            throw new Exception("Can't have less than " . Product::$min_count . " products.");
         }
     }
 }

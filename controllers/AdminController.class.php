@@ -25,18 +25,25 @@ class AdminController extends BaseController
         {
             if ($this->edit_product_is_valid())
             {
-                $update_data = array(
-                    "product_id" => $_POST["product_id"],
-                    "name" => $_POST["name" . $_POST["product_id"]],
-                    "description" => $_POST["description" . $_POST["product_id"]],
-                    "price" => $_POST["price" . $_POST["product_id"]],
-                    "quantity_in_stock" => $_POST["quantity_in_stock" . $_POST["product_id"]],
-                    "sale_price" => $_POST["sale_price" . $_POST["product_id"]],
-                    "is_on_sale" => $_POST["is_on_sale" . $_POST["product_id"]],
-                    "picture" => $_FILES["picture" . $_POST["product_id"]]
-                );
+                try
+                {
+                    $update_data = array(
+                        "product_id" => $_POST["product_id"],
+                        "name" => $_POST["name" . $_POST["product_id"]],
+                        "description" => $_POST["description" . $_POST["product_id"]],
+                        "price" => $_POST["price" . $_POST["product_id"]],
+                        "quantity_in_stock" => $_POST["quantity_in_stock" . $_POST["product_id"]],
+                        "sale_price" => $_POST["sale_price" . $_POST["product_id"]],
+                        "is_on_sale" => $_POST["is_on_sale" . $_POST["product_id"]],
+                        "picture" => $_FILES["picture" . $_POST["product_id"]]
+                    );
 
-                $this->service->update_product($update_data);
+                    $this->service->update_product($update_data);
+                }
+                catch (Exception $ex)
+                {
+                    $this->context->errors["rule_error" . $_POST["product_id"]][] = $ex->getMessage();
+                }
             }
         }
         elseif (isset($_POST["delete_product_submit"]))
