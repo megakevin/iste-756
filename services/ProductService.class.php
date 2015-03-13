@@ -142,13 +142,13 @@ class ProductService
                     pathinfo($data["picture"]["name"],PATHINFO_EXTENSION));
 
             move_uploaded_file($data["picture"]["tmp_name"], $target_file);
-            echo "move_uploaded_file();";
+            //echo "move_uploaded_file();";
 
             $product_to_update->picture = $target_file;
         }
 
         $product_to_update->update();
-        echo "product_to_update->update();";
+        //echo "product_to_update->update();";
     }
 
     public function delete_product($product_id)
