@@ -126,6 +126,42 @@ class ProductService
         $shopping_cart->update();
     }
 
+    public function create_product($data)
+    {
+        $product_to_create = new Product();
+
+        $product_to_create->name = htmlentities($data["name"]);
+        $product_to_create->description = htmlentities($data["description"]);
+        $product_to_create->price = $data["price"];
+        $product_to_create->quantity_in_stock = $data["quantity_in_stock"];
+        $product_to_create->sale_price = $data["sale_price"];
+        $product_to_create->is_on_sale = $data["is_on_sale"];
+
+        if ($product_to_create->is_on_sale)
+        {
+            $number_of_products_on_sale = Product::get_on_sale_count();
+
+            if ($number_of_products_on_sale >= Product::$max_on_sale_count)
+            {
+                throw new Exception("Can't have more than " . Product::$max_on_sale_count . " products on discount.");
+            }
+        }
+
+        if ($data["picture"]["name"])
+        {
+            $target_file = "img/products/" . basename($data["picture"]["tmp_name"] . "." .
+                    pathinfo($data["picture"]["name"],PATHINFO_EXTENSION));
+
+            move_uploaded_file($data["picture"]["tmp_name"], $target_file);
+            //echo "move_uploaded_file();";
+
+            $product_to_create->picture = $target_file;
+        }
+
+        $product_to_create->save();
+        //echo "product_to_update->save();";
+    }
+
     public function update_product($data)
     {
         $product_to_update = Product::get_by_id($data["product_id"]);
@@ -144,8 +180,8 @@ class ProductService
             }
         }
 
-        $product_to_update->name = $data["name"];
-        $product_to_update->description = $data["description"];
+        $product_to_update->name = htmlentities($data["name"]);
+        $product_to_update->description = htmlentities($data["description"]);
         $product_to_update->price = $data["price"];
         $product_to_update->quantity_in_stock = $data["quantity_in_stock"];
         $product_to_update->sale_price = $data["sale_price"];

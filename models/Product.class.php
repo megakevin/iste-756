@@ -391,6 +391,35 @@ class Product extends BaseModel
         }
     }
 
+    public function save()
+    {
+        $query = "INSERT INTO products(name, description, price, quantity_in_stock, picture, is_on_sale, sale_price)
+                  VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->bind_param("ssdisid",
+                $this->name,
+                $this->description,
+                $this->price,
+                $this->quantity_in_stock,
+                $this->picture,
+                $this->is_on_sale,
+                $this->sale_price);
+
+            $stmt->execute();
+
+            $this->id = $stmt->insert_id;
+        }
+
+        if ($stmt->error)
+        {
+            throw new Exception($stmt->error);
+        }
+    }
+
     public function reduce_quantity_in_stock_by($quantity_to_reduce)
     {
         if ($this->quantity_in_stock >= $quantity_to_reduce)

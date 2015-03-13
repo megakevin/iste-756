@@ -286,3 +286,16 @@ li.product-list-item textarea
 {
     width: 50%;
 }
+
+div.create-product-container
+{
+    padding: 10px 15px;
+}
+
+div.create-product-container span.description-label
+{
+    display: inline-block;
+    position: relative;
+    top: -20px;
+}
+

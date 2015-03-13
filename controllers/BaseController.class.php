@@ -18,6 +18,14 @@ abstract class BaseController
         }
     }
 
+    public function redirect_if_not_admin()
+    {
+        if ($_SESSION["user"]["role"] != "admin")
+        {
+            HttpHelper::redirect("index.php");
+        }
+    }
+
     abstract public function get();
     abstract public function post();
 }
