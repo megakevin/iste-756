@@ -134,4 +134,44 @@ class ProductService
 
         $product_to_update->update();
     }
+
+    public function delete_product($product_id)
+    {
+        $number_of_products = Product::get_count();
+
+        if ($number_of_products > Product::$min_count)
+        {
+            $product_to_delete = Product::get_by_id($product_id);
+
+            if ($product_to_delete->is_on_sale)
+            {
+                $number_of_products_on_sale = Product::get_on_sale_count();
+
+                if ($number_of_products_on_sale <= Product::$min_on_sale_count)
+                {
+                    throw new Exception("Can't have less than 3 products on discount.");
+                }
+            }
+
+            $cart_items_to_delete = ShoppingCartItem::get_by_product_id($product_id);
+
+            foreach ($cart_items_to_delete as $cart_item)
+            {
+                $cart_item->delete();
+                //echo "cart_item->delete(); <br>";
+
+                $shopping_cart = ShoppingCart::get_by_id($cart_item->shopping_cart_id);
+                $shopping_cart->calculate_total();
+                $shopping_cart->update();
+                //echo "shopping_cart->update(); <br>";
+            }
+
+            $product_to_delete->delete();
+            //echo "product_to_delete->delete(); <br>";
+        }
+        else
+        {
+            throw new Exception("Can't have less than 15 products.");
+        }
+    }
 }

@@ -59,6 +59,47 @@ class ShoppingCart extends BaseModel
         }
     }
 
+    public static function get_by_id($shopping_cart_id)
+    {
+        $query = "SELECT id, user_id, session_id, total_price
+                  FROM shopping_carts
+                  WHERE id = ?";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->bind_param("i", $shopping_cart_id);
+
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id, $user_id, $session_id, $total_price);
+
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    $cart_to_return = new ShoppingCart();
+
+                    $cart_to_return->id = $id;
+                    $cart_to_return->user_id = $user_id;
+                    $cart_to_return->session_id = $session_id;
+                    $cart_to_return->total_price = $total_price;
+
+                    return $cart_to_return;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            throw new Exception("No connection with teh DB");
+        }
+    }
+
     public function save()
     {
         $query = "INSERT INTO shopping_carts(user_id, session_id)

@@ -56,6 +56,46 @@ class ShoppingCartItem extends BaseModel
         }
     }
 
+    public static function get_by_product_id($product_id)
+    {
+        $result = array();
+        $query = "SELECT id, shopping_cart_id, product_id, product_quantity
+                  FROM shopping_cart_items
+                  WHERE product_id = ?";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->bind_param("i", $product_id);
+
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id, $shopping_cart_id, $product_id, $product_quantity);
+
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    $item = new ShoppingCartItem();
+
+                    $item->id = $id;
+                    $item->shopping_cart_id = $shopping_cart_id;
+                    $item->product_id = $product_id;
+                    $item->product_quantity = $product_quantity;
+
+                    $result[] = $item;
+                }
+            }
+
+            return $result;
+        }
+        else
+        {
+            throw new Exception("No connection with the DB");
+        }
+    }
+
     public function delete()
     {
         $query = "DELETE FROM shopping_cart_items WHERE id = ?";
@@ -78,5 +118,4 @@ class ShoppingCartItem extends BaseModel
             throw new Exception("No connection with the DB");
         }
     }
-
 }

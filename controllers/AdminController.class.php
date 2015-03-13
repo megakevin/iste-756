@@ -39,6 +39,20 @@ class AdminController extends BaseController
                 $this->service->update_product($update_data);
             }
         }
+        elseif (isset($_POST["delete_product_submit"]))
+        {
+            if ($this->delete_product_is_valid())
+            {
+                try
+                {
+                    $this->service->delete_product($_POST["product_id"]);
+                }
+                catch (Exception $ex)
+                {
+                    $this->context->errors["rule_error" . $_POST["product_id"]][] = $ex->getMessage();
+                }
+            }
+        }
 
         $this->load_data();
     }
@@ -105,6 +119,24 @@ class AdminController extends BaseController
             {
                 $this->context->errors["picture" . $_POST["product_id"]][] = "Only image files are allowed.";
             }
+        }
+
+        # If there are no errors, then the input is valid
+        return empty($this->context->errors);
+    }
+
+    public function delete_product_is_valid()
+    {
+        $validator = new ValidationHelper();
+
+        if (!$validator->validate_required($_POST["product_id"]))
+        {
+            $this->context->errors["product_id"][] = "Product Id is required.";
+        }
+
+        if (!$validator->validate_number($_POST["product_id"]))
+        {
+            $this->context->errors["product_id" ][] = "Not a valid Product Id.";
         }
 
         # If there are no errors, then the input is valid

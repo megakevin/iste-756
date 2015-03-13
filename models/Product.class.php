@@ -13,9 +13,73 @@ class Product extends BaseModel
     public $is_on_sale;
     public $sale_price;
 
+    public static $min_count = 15;
+    public static $min_on_sale_count = 3;
+    public static $max_on_sale_count = 5;
+
     public function __construct()
     {
 
+    }
+
+    public static function get_count()
+    {
+        $query = "SELECT COUNT(id) FROM products";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($count);
+
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    return $count;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            throw new Exception("No connection with the DB");
+        }
+    }
+
+    public static function get_on_sale_count()
+    {
+        $query = "SELECT COUNT(id) FROM products WHERE is_on_sale = TRUE";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($count);
+
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    return $count;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            throw new Exception("No connection with the DB");
+        }
     }
 
     public static function get_by_id($id)
@@ -303,6 +367,29 @@ class Product extends BaseModel
         else
         {
             throw new Exception("Cannot increase by negative number");
+        }
+    }
+
+    public function delete()
+    {
+        $query = "DELETE FROM products WHERE id = ?";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->bind_param("i", $this->id);
+
+            $stmt->execute();
+
+            if ($stmt->error)
+            {
+                throw new Exception($stmt->error);
+            }
+        }
+        else
+        {
+            throw new Exception("No connection with the DB");
         }
     }
 }

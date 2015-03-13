@@ -50,6 +50,8 @@
                         </p>
                         <?php if ($context->errors) { ?>
                             <div>
+                                <?php show_error_messages("rule_error" . $product->id); ?>
+
                                 <?php show_error_messages("name" . $product->id); ?>
                                 <?php show_error_messages("description" . $product->id); ?>
                                 <?php show_error_messages("price" . $product->id); ?>
