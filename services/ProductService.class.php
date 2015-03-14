@@ -67,6 +67,11 @@ class ProductService
 //        return $result;
 //    }
 
+    public function get_product_count()
+    {
+        return Product::get_count();
+    }
+
     public function get_page_size()
     {
         return ProductService::$page_size;

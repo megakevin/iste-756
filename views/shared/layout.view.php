@@ -3,6 +3,9 @@
     <head>
         <title><?php echo $page_title; ?></title>
         <link rel="stylesheet" href="css/style.css">
+
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
     </head>
     <body>
         <div id="main-container">
@@ -24,11 +27,7 @@
 
                     <?php if (!isset($_SESSION["user"])) { ?>
                         <li class="navigation-item">
-                            <form method="POST" action="login.php">
-                                <input type="text" name="username" id="username" placeholder="Enter your username">
-                                <input type="password" name="password" id="password" placeholder="Enter your password">
-                                <input type="submit" name="login_submit" value="Login">
-                            </form>
+                            <?php include "login_form.view.php"; ?>
                         </li>
                     <?php } ?>
                 </ul>

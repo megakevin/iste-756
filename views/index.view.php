@@ -5,15 +5,11 @@
 
 <section id="offers">
     <h2>Today's Offers</h2>
-    <?php
-        show_product_container($context->products_on_sale);
-    ?>
+    <?php show_product_container($context->products_on_sale); ?>
 </section>
 <section id="catalog">
     <h2>Product Catalog</h2>
-    <?php
-        show_product_container($context->products);
-    ?>
+    <?php show_product_container($context->products); ?>
     <div>
         <?php if (! $context->is_first_page ) { ?>
             <a class="button" href="index.php?page=<?= $context->prev_page ?>">< Prev</a>

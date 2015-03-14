@@ -22,10 +22,8 @@ class Product extends BaseModel
 
     }
 
-    public static function get_count()
+    public static function select_count($query)
     {
-        $query = "SELECT COUNT(id) FROM products";
-
         $db = BaseModel::get_connection();
 
         if ($stmt = $db->prepare($query))
@@ -52,34 +50,14 @@ class Product extends BaseModel
         }
     }
 
+    public static function get_count()
+    {
+        return Product::select_count("SELECT COUNT(id) FROM products");
+    }
+
     public static function get_on_sale_count()
     {
-        $query = "SELECT COUNT(id) FROM products WHERE is_on_sale = TRUE";
-
-        $db = BaseModel::get_connection();
-
-        if ($stmt = $db->prepare($query))
-        {
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($count);
-
-            if ($stmt->num_rows > 0)
-            {
-                while ($stmt->fetch())
-                {
-                    return $count;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-        else
-        {
-            throw new Exception("No connection with the DB");
-        }
+        return Product::select_count("SELECT COUNT(id) FROM products WHERE is_on_sale = TRUE");
     }
 
     public static function get_by_id($id)
@@ -126,189 +104,69 @@ class Product extends BaseModel
             throw new Exception("No connection with the DB");
         }
     }
-    
-//    public static function select($query, $bind_result_callback, $selector_callback)
-//    {
-//        $result = array();
-//
-//        $db = BaseModel::get_connection();
-//
-//        if ($stmt = $db->prepare($query))
-//        {
-//            $stmt->execute();
-//            $stmt->store_result();
-//            $bind_result_callback($stmt);
-//
-//            if ($stmt->num_rows > 0)
-//            {
-//                while ($stmt->fetch())
-//                {
-//                    $result[] = $selector_callback();
-//                }
-//            }
-//        }
-//
-//        return $result;
-//    }
-//
-//    public static function get()
-//    {
-//        $id = "";
-//        $name = "";
-//        $description = "";
-//        $quantity_in_stock = "";
-//        $picture = "";
-//        $price = "";
-//        $sale_price = "";
-//        $is_on_sale = "";
-//
-//        return Product::select("SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
-//                                FROM products
-//                                WHERE is_on_sale = TRUE",
-//                                function ($stmt)
-//                                {
-//                                    $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
-//                                },
-//                                function ()
-//                                {
-//                                    $product = new Product();
-//
-//                                    $product->id = $id;
-//                                    $product->name = $name;
-//                                    $product->description = $description;
-//                                    $product->quantity_in_stock = $quantity_in_stock;
-//                                    $product->picture = $picture;
-//                                    $product->price = $price;
-//                                    $product->sale_price = $sale_price;
-//                                    $product->is_on_sale = $is_on_sale;
-//
-//                                    return $product;
-//                                });
-//    }
 
-    public static function get_all()
+    public function select_all($query)
     {
         $result = array();
-        $query = "SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
-                  FROM products";
 
         $db = BaseModel::get_connection();
 
         if ($stmt = $db->prepare($query))
         {
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
-
-            if ($stmt->num_rows > 0)
-            {
-                while ($stmt->fetch())
-                {
-                    $product = new Product();
-
-                    $product->id = $id;
-                    $product->name = $name;
-                    $product->description = $description;
-                    $product->quantity_in_stock = $quantity_in_stock;
-                    $product->picture = $picture;
-                    $product->price = $price;
-                    $product->sale_price = $sale_price;
-                    $product->is_on_sale = $is_on_sale;
-
-                    $result[] = $product;
-                }
-            }
-
-            return $result;
+            return Product::execute_and_bind_result($stmt);
         }
         else
         {
             throw new Exception("No connection with the DB");
         }
+    }
+
+    public static function get_all()
+    {
+        return Product::select_all("SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
+                                  FROM products");
     }
 
     public static function get_all_on_sale()
     {
-        $result = array();
-        $query = "SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
-                  FROM products
-                  WHERE is_on_sale = TRUE";
-
-        $db = BaseModel::get_connection();
-
-        if ($stmt = $db->prepare($query))
-        {
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
-
-            if ($stmt->num_rows > 0)
-            {
-                while ($stmt->fetch())
-                {
-                    $product = new Product();
-
-                    $product->id = $id;
-                    $product->name = $name;
-                    $product->description = $description;
-                    $product->quantity_in_stock = $quantity_in_stock;
-                    $product->picture = $picture;
-                    $product->price = $price;
-                    $product->sale_price = $sale_price;
-                    $product->is_on_sale = $is_on_sale;
-
-                    $result[] = $product;
-                }
-            }
-
-            return $result;
-        }
-        else
-        {
-            throw new Exception("No connection with the DB");
-        }
+        return Product::select_all("SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
+                                    FROM products
+                                    WHERE is_on_sale = TRUE");
     }
 
     public static function get_all_not_on_sale()
     {
-        $result = array();
-        $query = "SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
-                  FROM products
-                  WHERE is_on_sale = FALSE";
+        return Product::select_all("SELECT id, name, description, quantity_in_stock, picture, price, sale_price, is_on_sale
+                                    FROM products
+                                    WHERE is_on_sale = FALSE");
+    }
 
-        $db = BaseModel::get_connection();
+    private static function execute_and_bind_result($stmt)
+    {
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
 
-        if ($stmt = $db->prepare($query))
+        if ($stmt->num_rows > 0)
         {
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
-
-            if ($stmt->num_rows > 0)
+            while ($stmt->fetch())
             {
-                while ($stmt->fetch())
-                {
-                    $product = new Product();
+                $product = new Product();
 
-                    $product->id = $id;
-                    $product->name = $name;
-                    $product->description = $description;
-                    $product->quantity_in_stock = $quantity_in_stock;
-                    $product->picture = $picture;
-                    $product->price = $price;
-                    $product->sale_price = $sale_price;
-                    $product->is_on_sale = $is_on_sale;
+                $product->id = $id;
+                $product->name = $name;
+                $product->description = $description;
+                $product->quantity_in_stock = $quantity_in_stock;
+                $product->picture = $picture;
+                $product->price = $price;
+                $product->sale_price = $sale_price;
+                $product->is_on_sale = $is_on_sale;
 
-                    $result[] = $product;
-                }
+                $result[] = $product;
             }
+        }
 
-            return $result;
-        }
-        else
-        {
-            throw new Exception("No connection with the DB");
-        }
+        return $result;
     }
 
     public static function get_not_on_sale_limit($limit_start, $limit_offset)
@@ -325,30 +183,7 @@ class Product extends BaseModel
         {
             $stmt->bind_param("ii", $limit_start, $limit_offset);
 
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $name, $description, $quantity_in_stock, $picture, $price, $sale_price, $is_on_sale);
-
-            if ($stmt->num_rows > 0)
-            {
-                while ($stmt->fetch())
-                {
-                    $product = new Product();
-
-                    $product->id = $id;
-                    $product->name = $name;
-                    $product->description = $description;
-                    $product->quantity_in_stock = $quantity_in_stock;
-                    $product->picture = $picture;
-                    $product->price = $price;
-                    $product->sale_price = $sale_price;
-                    $product->is_on_sale = $is_on_sale;
-
-                    $result[] = $product;
-                }
-            }
-
-            return $result;
+            return Product::execute_and_bind_result($stmt);
         }
         else
         {
@@ -446,24 +281,6 @@ class Product extends BaseModel
 
     public function delete()
     {
-        $query = "DELETE FROM products WHERE id = ?";
-
-        $db = BaseModel::get_connection();
-
-        if ($stmt = $db->prepare($query))
-        {
-            $stmt->bind_param("i", $this->id);
-
-            $stmt->execute();
-
-            if ($stmt->error)
-            {
-                throw new Exception($stmt->error);
-            }
-        }
-        else
-        {
-            throw new Exception("No connection with the DB");
-        }
+        parent::delete("products");
     }
 }

@@ -16,18 +16,15 @@ class ShoppingCartItem extends BaseModel
 
     }
 
-    public static function get_by($shopping_cart_id)
+    public static function select_by($query, $id_to_look_by)
     {
         $result = array();
-        $query = "SELECT id, shopping_cart_id, product_id, product_quantity
-                  FROM shopping_cart_items
-                  WHERE shopping_cart_id = ?";
 
         $db = BaseModel::get_connection();
 
         if ($stmt = $db->prepare($query))
         {
-            $stmt->bind_param("i", $shopping_cart_id);
+            $stmt->bind_param("i", $id_to_look_by);
 
             $stmt->execute();
             $stmt->store_result();
@@ -54,68 +51,24 @@ class ShoppingCartItem extends BaseModel
         {
             throw new Exception("No connection with the DB");
         }
+    }
+
+    public static function get_by($shopping_cart_id)
+    {
+        return ShoppingCartItem::select_by("SELECT id, shopping_cart_id, product_id, product_quantity
+                                            FROM shopping_cart_items
+                                            WHERE shopping_cart_id = ?", $shopping_cart_id);
     }
 
     public static function get_by_product_id($product_id)
     {
-        $result = array();
-        $query = "SELECT id, shopping_cart_id, product_id, product_quantity
-                  FROM shopping_cart_items
-                  WHERE product_id = ?";
-
-        $db = BaseModel::get_connection();
-
-        if ($stmt = $db->prepare($query))
-        {
-            $stmt->bind_param("i", $product_id);
-
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $shopping_cart_id, $product_id, $product_quantity);
-
-            if ($stmt->num_rows > 0)
-            {
-                while ($stmt->fetch())
-                {
-                    $item = new ShoppingCartItem();
-
-                    $item->id = $id;
-                    $item->shopping_cart_id = $shopping_cart_id;
-                    $item->product_id = $product_id;
-                    $item->product_quantity = $product_quantity;
-
-                    $result[] = $item;
-                }
-            }
-
-            return $result;
-        }
-        else
-        {
-            throw new Exception("No connection with the DB");
-        }
+        return ShoppingCartItem::select_by("SELECT id, shopping_cart_id, product_id, product_quantity
+                                            FROM shopping_cart_items
+                                            WHERE product_id = ?", $product_id);
     }
 
     public function delete()
     {
-        $query = "DELETE FROM shopping_cart_items WHERE id = ?";
-
-        $db = BaseModel::get_connection();
-
-        if ($stmt = $db->prepare($query))
-        {
-            $stmt->bind_param("i", $this->id);
-
-            $stmt->execute();
-
-            if ($stmt->error)
-            {
-                throw new Exception($stmt->error);
-            }
-        }
-        else
-        {
-            throw new Exception("No connection with the DB");
-        }
+        parent::delete("shopping_cart_items");
     }
 }

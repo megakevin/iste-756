@@ -23,4 +23,27 @@ abstract class BaseModel
 
         return BaseModel::$connection;
     }
+
+    public function delete($table)
+    {
+        $query = "DELETE FROM $table WHERE id = ?";
+
+        $db = BaseModel::get_connection();
+
+        if ($stmt = $db->prepare($query))
+        {
+            $stmt->bind_param("i", $this->id);
+
+            $stmt->execute();
+
+            if ($stmt->error)
+            {
+                throw new Exception($stmt->error);
+            }
+        }
+        else
+        {
+            throw new Exception("No connection with the DB");
+        }
+    }
 }

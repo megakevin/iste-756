@@ -28,11 +28,23 @@ class ProductController extends BaseController
         }
         else
         {
-            $_SESSION["page"] = 1;
+            if (!$_SESSION["page"])
+            {
+                $_SESSION["page"] = 1;
+            }
         }
 
         $this->context->prev_page = $_SESSION["page"] <= 1 ? 1 : $_SESSION["page"] - 1;
         $this->context->next_page = $_SESSION["page"] + 1;
+
+        if ($_SESSION["page"] == 1)
+        {
+            $this->context->is_first_page = true;
+        }
+        elseif ($this->service->get_page_size() * ($_SESSION["page"] + 1) >= $this->service->get_product_count())
+        {
+            $this->context->is_last_page = true;
+        }
     }
 
     public function post()
@@ -45,6 +57,7 @@ class ProductController extends BaseController
             }
         }
 
+        $this->paginate();
         $this->load_data();
     }
 
@@ -52,17 +65,6 @@ class ProductController extends BaseController
     {
         $this->context->products_on_sale = $this->service->get_products_on_sale();
         $this->context->products = $this->service->get_products_not_on_sale_page($_SESSION["page"]);
-
-        if ($_SESSION["page"] == 1)
-        {
-            $this->context->is_first_page = true;
-        }
-        elseif (count($this->context->products) < $this->service->get_page_size())
-        {
-            $this->context->is_last_page = true;
-        }
-
-        //$this->context->products = $this->service->get_products();
     }
 
     public function add_to_cart_is_valid()
