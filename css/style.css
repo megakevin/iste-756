@@ -299,3 +299,9 @@ div.create-product-container span.description-label
     top: -20px;
 }
 
+span.welcome-message
+{
+    display: inline-block;
+    margin-top: 10px;
+}
+

@@ -11,18 +11,27 @@ class UserService
 
     }
 
+    public function register($data)
+    {
+        try
+        {
+            $user_to_return = User::create_customer($data["username"], $data["password"]);
+
+            $this->reassign_shopping_cart($user_to_return);
+
+            return $user_to_return;
+        }
+        catch (Exception $ex)
+        {
+            throw new Exception("Username already exists.");
+        }
+    }
+
     public function authenticate($data)
     {
         $user_to_return = User::get_by($data["username"], $data["password"]);
 
-        $shopping_cart = ShoppingCart::get_by($user_to_return->id, session_id());
-
-        if ($shopping_cart)
-        {
-            $shopping_cart->session_id = "";
-            $shopping_cart->user_id = $user_to_return->id;
-            $shopping_cart->update();
-        }
+        $this->reassign_shopping_cart($user_to_return);
 
         if ($user_to_return)
         {
@@ -31,6 +40,18 @@ class UserService
         else
         {
             throw new Exception("Wrong username and password.");
+        }
+    }
+
+    public function reassign_shopping_cart($user)
+    {
+        $shopping_cart = ShoppingCart::get_by($user->id, session_id());
+
+        if ($shopping_cart)
+        {
+            $shopping_cart->session_id = "";
+            $shopping_cart->user_id = $user->id;
+            $shopping_cart->update();
         }
     }
 }

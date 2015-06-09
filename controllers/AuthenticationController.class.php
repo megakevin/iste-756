@@ -26,18 +26,48 @@ class AuthenticationController extends BaseController
         {
             if ($this->is_valid())
             {
-                try
-                {
-                    $authenticated_user = $this->service->authenticate($_POST);
-                    $_SESSION["user"] = $authenticated_user->to_assoc_array();
-
-                    HttpHelper::redirect("index.php");
-                }
-                catch (Exception $ex)
-                {
-                    $this->context->errors["rule_error"][] = $ex->getMessage();
-                }
+                $this->try_login("authenticate");
             }
+        }
+        if (isset($_POST["register_submit"]))
+        {
+            if ($this->is_valid())
+            {
+                $this->try_login("register");
+            }
+        }
+        if (isset($_POST["logout_submit"]))
+        {
+            session_unset();
+            session_destroy();
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', 1, $params['path'], $params['domain'], $params['secure'], isset($params['httponly']));
+            session_regenerate_id(true);
+
+            HttpHelper::redirect("index.php");
+        }
+    }
+
+    public function try_login($auth_method)
+    {
+        try
+        {
+            if ($auth_method == "authenticate")
+            {
+                $authenticated_user = $this->service->authenticate($_POST);
+            }
+            elseif ($auth_method == "register")
+            {
+                $authenticated_user = $this->service->register($_POST);
+            }
+
+            $_SESSION["user"] = $authenticated_user->to_assoc_array();
+
+            HttpHelper::redirect("index.php");
+        }
+        catch (Exception $ex)
+        {
+            $this->context->errors["rule_error"][] = $ex->getMessage();
         }
     }
 

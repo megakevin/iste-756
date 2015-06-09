@@ -29,6 +29,15 @@
                         <li class="navigation-item">
                             <?php include "login_form.view.php"; ?>
                         </li>
+                    <?php } else { ?>
+                        <li class="navigation-item">
+                            <span class="welcome-message">Welcome, <?= $_SESSION["user"]["email"] ?></span>
+                        </li>
+                        <li class="navigation-item">
+                            <form method="POST" action="login.php">
+                                <input type="submit" name="logout_submit" value="Log Out">
+                            </form>
+                        </li>
                     <?php } ?>
                 </ul>
             </section>
